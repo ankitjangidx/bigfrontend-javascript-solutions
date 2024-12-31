@@ -1,0 +1,12 @@
+{
+  "name": "bigfrontend-javascript-solutions",
+  "version": "1.0.0",
+  "description": "This repo contains a bigfrontend javascript question solution",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

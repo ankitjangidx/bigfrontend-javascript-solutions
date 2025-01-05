@@ -17,8 +17,8 @@ Function.prototype.mybind = function (context, ...args) {
   const symbol = Symbol();
   context[symbol] = this;
 
-  return function () {
-    const result = context[symbol](...args); // call the function
+  return function (...newArgs) {
+    const result = context[symbol](...args,...newArgs); // call the function
     delete context[symbol]; // delete the unique key
     return result; // return result
   };

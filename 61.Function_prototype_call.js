@@ -1,20 +1,50 @@
+// CALL POLYFILL
+// args is arguments one by one
+Function.prototype.mycall = function (context, ...args) {
+  // you tie a function into an object(context) as if it belonged to the object
+  const symbol = Symbol(); // create unique key
 
+  context = Object(context || window); // set context to windows if null and Create an object to handle primitive values
+  // 'this' points to the calling function here
+  context[symbol] = this; // assign the function to a unique method created on the context
+  const result = context[symbol](...args); // call the function
+  delete context[symbol]; // delete the unique key
+  return result; // return result
+};
+// BIND POLYFILL
+// bind returns a func which when called behave like apply, call
+Function.prototype.mybind = function (context, ...args) {
+  const symbol = Symbol();
+  context[symbol] = this;
 
+  return function () {
+    const result = context[symbol](...args); // call the function
+    delete context[symbol]; // delete the unique key
+    return result; // return result
+  };
+};
+// APPLY POLYFILL
+// code exact same as call just the args is an array here so need to destruct(...)
+Function.prototype.myapply = function (context, args) {
+  // you tie a function into an object(context) as if it belonged to the object
+  const symbol = Symbol(); // create unique key
 
-Function.prototype.mycall = function(thisArg, ...args) {
-    // your code here
-        const symbol = Symbol();
-        thisArg=Object(thisArg || window);
-        thisArg[symbol]=this;
-        const result = thisArg[symbol](...args);
-        delete thisArg[symbol];
-        return result
-  }
-const obj = {
-    name: "ankit jangid",
-   
-}  
- function printName (a,b) {
-    console.log("name is: "+this.name+" a: "+a+" b: "+b)
+  context = Object(context || window); // set context to windows if null and Create an object to handle primitive values
+  // 'this' points to the calling function here
+  context[symbol] = this; // assign the function to a unique method created on the context
+  const result = context[symbol](...args); // call the function
+  delete context[symbol]; // delete the unique key
+  return result; // return result
+};
+// Testing
+let obj = {
+  a: 10,
+  b: 20,
+};
+function tester(a, b) {
+  return `a: ${this.a} and b: ${this.b} | curr args a: ${a} and b: ${b}`;
 }
-printName.mycall(obj,10,20)
+console.log(tester.mycall(obj, 30, 40));
+const bindFunc = tester.mybind(obj, 30, 40);
+console.log(bindFunc());
+console.log(tester.myapply(obj, [30, 40]));
